@@ -1,0 +1,16 @@
+{
+  "doc": [
+    { "id": "d1", "title": "需求文档审查助手", "desc": "检查文档逻辑漏洞", "info": "将需求文档拖入对话中，并发送“请你根据文档中写的需求进行审查”", "tag": "DOC", "image": "assets/shencha.png", "link": "https://chat.q1.com/?agent_share=pblnHahyF5I0kyaJ-vxwvA" },
+    { "id": "d2", "title": "需求文档测试用例", "desc": "根据需求内容生成策划自测用例", "info": "将需求文档拖入对话中，并发送“请你根据文档系统需求，生成策划自测用例”，会生成测试用例表。该工具是用来策划验收需求时的初步自测", "tag": "DOC", "image": "assets/ceshiyongli.png", "link": "https://chat.q1.com/?agent_share=P_8le3YbV8Xct2rEOqbdiw" }
+  ],
+  "art": [
+    { "id": "a1", "title": "UI对比验收助手", "desc": "用于策划验收UI", "info": "在excel中将效果图放在左边，游戏截图放在右边，然后截图放入对话中，提示“左边是效果图，右边是游戏内截图，请帮我验收一下UI”", "tag": "ART", "image": "assets/UI.png", "link": "https://chat.q1.com/?agent_share=4m4tjVIqK5CL_xwU87Cfxw" }
+  ],
+  "system": [
+    { "id": "s1", "title": "暂未想好", "desc": "欢迎提供建议", "info": "该智能体专注于...", "tag": "SYS", "image": "assets/s1.png", "link": "https://chat.q1.com" }
+  ],
+  "web": [
+    { "id": "a2", "title": "GAMEUI", "desc": "游戏参考图", "info": "该智能体专注于文档逻辑分析...", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.gameui.net/games?t=1" }
+  ]
+}
+
