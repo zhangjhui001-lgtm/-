@@ -260,10 +260,20 @@
             margin: 0 0 12px 0;
             font-size: 0.98rem;
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: flex-start;
             gap: 12px;
             line-height: 1.35;
+            width: 100%;
+        }
+
+        .card-title {
+            flex: 1 1 auto;
+            min-width: 0;
+            padding-right: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .card p {
@@ -287,7 +297,14 @@
             letter-spacing: 0.04em;
         }
 
-        .card-actions { display: flex; gap: 8px; align-items: center; }
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex: 0 0 auto;
+            margin-left: auto;
+            white-space: nowrap;
+        }
         .btn-icon { cursor: pointer; color: #64748b; transition: 0.2s; }
         .btn-icon:hover { color: var(--accent-blue); }
         .star-btn { color: #475569; transition: 0.2s; cursor: pointer; }
@@ -532,7 +549,7 @@
                 <div class="card" style="--card-accent-rgb: ${getCardAccent(item.tag)};" onclick='window.open(${JSON.stringify(item.link)})'>
                     <div class="card-content">
                         <h3>
-                            <span>${item.title}</span>
+                            <span class="card-title">${item.title}</span>
                             <div class="card-actions">
                                 <span class="btn-icon" onclick='showInfo(${JSON.stringify(item.title)}, ${JSON.stringify(item.info || '')}, ${JSON.stringify(item.image || '')}, event)'>
                                     <i data-lucide="info" size="14" class="info-btn"></i>
