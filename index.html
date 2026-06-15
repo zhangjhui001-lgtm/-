@@ -813,7 +813,10 @@
 
             const target = document.getElementById(`section-${page}`);
             if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const maxScrollTop = scrollRoot.scrollHeight - scrollRoot.clientHeight;
+                const targetTop = target.offsetTop - 20;
+                const clampedTop = Math.max(0, Math.min(targetTop, maxScrollTop));
+                scrollRoot.scrollTo({ top: clampedTop, behavior: 'smooth' });
             }
         }
 
