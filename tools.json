@@ -9,9 +9,9 @@
   ],
 
   "web": [
-    { "id": "w1", "title": "GAMEUI", "desc": "游戏参考图", "info": "几乎绝大部分游戏截图这里都能看到", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.gameui.net/games?t=1" },
-     { "id": "w2", "title": "花瓣网", "desc": "素材搜索", "info": "有较多的游戏截图和游戏资源素材，需要记得分类选择游戏", "tag": "WEB", "image": "assets/s1.png", "link": "https://huaban.com/discovery" },
-     { "id": "w3", "title": "pinterest", "desc": "素材搜索", "info": "能够有较多的欧美风格游戏素材", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.pinterest.com/" }
+    { "id": "w1", "title": "GAMEUI", "desc": "几乎绝大部分游戏截图这里都能看到", "info": "几乎绝大部分游戏截图这里都能看到", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.gameui.net/games?t=1" },
+     { "id": "w2", "title": "花瓣网", "desc": "有较多的游戏截图和游戏资源素材，需要记得分类选择游戏", "info": "有较多的游戏截图和游戏资源素材，需要记得分类选择游戏", "tag": "WEB", "image": "assets/s1.png", "link": "https://huaban.com/discovery" },
+     { "id": "w3", "title": "pinterest", "desc": "能够有较多的欧美风格游戏素材", "info": "能够有较多的欧美风格游戏素材", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.pinterest.com/" }
   ],
 
     "system": [
