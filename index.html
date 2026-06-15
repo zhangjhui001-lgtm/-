@@ -199,11 +199,94 @@
         }
 
         /* Individual tool card */
-        .card { background: #1e293b; padding: 20px; border-radius: 8px; cursor: pointer; border: 1px solid #2d3748; transition: 0.3s; height: 160px; position: relative; }
-        .card:hover { border-color: var(--accent-blue); }
-        .card h3 { color: #fff; margin: 0 0 10px 0; font-size: 0.95rem; display: flex; justify-content: space-between; align-items: center; }
-        .card p { color: var(--text-dim); font-size: 0.75rem; line-height: 1.5; }
-        .tag { font-size: 0.7rem; background: #0f172a; padding: 2px 8px; border-radius: 4px; color: #cbd5e1; border: 1px solid #334155; display: inline-block; margin-bottom: 10px; }
+        .card {
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)),
+                #1e293b;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+            height: 160px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-left: 4px solid rgba(var(--card-accent-rgb), 0.95);
+            background:
+                linear-gradient(135deg, rgba(var(--card-accent-rgb), 0.16), transparent 32%),
+                radial-gradient(circle at top right, rgba(var(--card-accent-rgb), 0.14), transparent 36%);
+            opacity: 0.95;
+            pointer-events: none;
+        }
+
+        .card::after {
+            content: "";
+            position: absolute;
+            inset: auto -24px -28px auto;
+            width: 112px;
+            height: 112px;
+            background: radial-gradient(circle, rgba(var(--card-accent-rgb), 0.14), transparent 68%);
+            opacity: 0;
+            transition: opacity 180ms ease, transform 180ms ease;
+            pointer-events: none;
+            transform: scale(0.9);
+        }
+
+        .card:hover {
+            border-color: rgba(var(--card-accent-rgb), 0.45);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px rgba(2, 6, 23, 0.28);
+        }
+
+        .card:hover::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card h3 {
+            color: #fff;
+            margin: 0 0 12px 0;
+            font-size: 0.98rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            line-height: 1.35;
+        }
+
+        .card p {
+            color: var(--text-dim);
+            font-size: 0.78rem;
+            line-height: 1.55;
+            margin: 0;
+            max-width: 92%;
+        }
+
+        .tag {
+            font-size: 0.68rem;
+            background: rgba(15, 23, 42, 0.72);
+            padding: 3px 9px;
+            border-radius: 999px;
+            color: rgba(226, 232, 240, 0.92);
+            border: 1px solid rgba(var(--card-accent-rgb), 0.3);
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 12px;
+            letter-spacing: 0.04em;
+        }
+
         .card-actions { display: flex; gap: 8px; align-items: center; }
         .btn-icon { cursor: pointer; color: #64748b; transition: 0.2s; }
         .btn-icon:hover { color: var(--accent-blue); }
@@ -253,8 +336,12 @@
             body::before,
             body::after,
             .bg-orb,
-            .particle {
+            .particle,
+            .card,
+            .card::after,
+            .add-float-btn {
                 animation: none !important;
+                transition: none !important;
             }
 
             .bg-layer {
@@ -412,6 +499,21 @@
         function closeFullImage() { document.getElementById('fullScreenOverlay').style.display = 'none'; }
         function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
 
+        // 按分类返回克制的强调色
+        /* Map tool categories to subtle accent colors */
+        function getCardAccent(tag) {
+            const key = String(tag || '').toLowerCase();
+            const palette = {
+                doc: '56, 189, 248',
+                art: '245, 158, 11',
+                web: '52, 211, 153',
+                sys: '148, 163, 184',
+                system: '148, 163, 184'
+            };
+
+            return palette[key] || '96, 165, 250';
+        }
+
         // 收藏 / 取消收藏
         /* Toggle favorite status for the selected card */
         function toggleFav(id, event) {
@@ -427,15 +529,15 @@
         function createCard(item) {
             const isFav = favorites.includes(item.id);
             return `
-                <div class="card" onclick="window.open('${item.link}')">
-                    <div class="card-content" style="width: 100%;">
+                <div class="card" style="--card-accent-rgb: ${getCardAccent(item.tag)};" onclick="window.open(${JSON.stringify(item.link)})">
+                    <div class="card-content">
                         <h3>
                             <span>${item.title}</span>
                             <div class="card-actions">
-                                <span class="btn-icon" onclick="showInfo('${item.title}', '${item.info || ''}', '${item.image || ''}', event)">
+                                <span class="btn-icon" onclick="showInfo(${JSON.stringify(item.title)}, ${JSON.stringify(item.info || '')}, ${JSON.stringify(item.image || '')}, event)">
                                     <i data-lucide="info" size="14" class="info-btn"></i>
                                 </span>
-                                <span onclick="toggleFav('${item.id}', event)">
+                                <span onclick="toggleFav(${JSON.stringify(item.id)}, event)">
                                     <i data-lucide="star" class="star-btn ${isFav ? 'active' : ''}" size="14"></i>
                                 </span>
                             </div>
