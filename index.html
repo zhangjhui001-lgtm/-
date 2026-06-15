@@ -529,15 +529,15 @@
         function createCard(item) {
             const isFav = favorites.includes(item.id);
             return `
-                <div class="card" style="--card-accent-rgb: ${getCardAccent(item.tag)};" onclick="window.open(${JSON.stringify(item.link)})">
+                <div class="card" style="--card-accent-rgb: ${getCardAccent(item.tag)};" onclick='window.open(${JSON.stringify(item.link)})'>
                     <div class="card-content">
                         <h3>
                             <span>${item.title}</span>
                             <div class="card-actions">
-                                <span class="btn-icon" onclick="showInfo(${JSON.stringify(item.title)}, ${JSON.stringify(item.info || '')}, ${JSON.stringify(item.image || '')}, event)">
+                                <span class="btn-icon" onclick='showInfo(${JSON.stringify(item.title)}, ${JSON.stringify(item.info || '')}, ${JSON.stringify(item.image || '')}, event)'>
                                     <i data-lucide="info" size="14" class="info-btn"></i>
                                 </span>
-                                <span onclick="toggleFav(${JSON.stringify(item.id)}, event)">
+                                <span onclick='toggleFav(${JSON.stringify(item.id)}, event)'>
                                     <i data-lucide="star" class="star-btn ${isFav ? 'active' : ''}" size="14"></i>
                                 </span>
                             </div>
