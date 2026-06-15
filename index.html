@@ -24,6 +24,8 @@
             margin: 0;
             min-height: 100vh;
             display: flex;
+            height: 100vh;
+            overflow: hidden;
             color: var(--text-main);
             background:
                 radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 28%),
@@ -135,7 +137,10 @@
             padding: 24px;
             border-right: 1px solid rgba(255, 255, 255, 0.05);
             flex-shrink: 0;
-            position: relative;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
             z-index: 1;
             backdrop-filter: blur(14px);
         }
@@ -143,7 +148,17 @@
         .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
         .nav-item.active { background: var(--accent-blue); color: #000; font-weight: bold; }
         /* Main content column */
-        .main-content { flex: 1; padding: 40px; display: flex; flex-direction: column; position: relative; z-index: 1; }
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+            height: 100vh;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+        }
         /* Search bar and action button row */
         .top-toolbar {
             display: flex;
@@ -530,6 +545,9 @@
             { key: 'system', title: '其他', icon: 'settings' }
         ];
 
+        let scrollObserver = null;
+        let scrollRoot = null;
+
         // 页面初始化：加载数据、创建背景、默认进入总览
         /* Initial page bootstrap */
         async function init() {
@@ -540,6 +558,7 @@
                 bindBackgroundMotion();
                 renderPageContent('home');
                 loadPage('home', document.querySelector('.nav-item'));
+                bindScrollSpy();
             } catch (e) {
                 console.error("Failed to load JSON");
             }
@@ -674,15 +693,79 @@
             }
         }
 
+        function setActiveNav(page) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const target = document.querySelector(`.nav-item[onclick*="loadPage('${page}'"]`);
+            if (target) target.classList.add('active');
+        }
+
+        function bindScrollSpy() {
+            if (scrollObserver) scrollObserver.disconnect();
+
+            scrollRoot = document.querySelector('.main-content');
+            const sectionIds = ['doc', 'art', 'web', 'system'];
+            const sections = sectionIds
+                .map(id => document.getElementById(`section-${id}`))
+                .filter(Boolean);
+
+            if (!sections.length) return;
+            if (!scrollRoot) return;
+
+            const homeThreshold = 220;
+
+            const updateByScroll = () => {
+                const sectionsTop = sections.map(section => ({
+                    id: section.id.replace('section-', ''),
+                    top: section.getBoundingClientRect().top
+                }));
+
+                const current = sectionsTop.find(item => item.top >= -homeThreshold && item.top <= homeThreshold);
+                if (current) {
+                    setActiveNav(current.id);
+                    window.currentPage = current.id;
+                    return;
+                }
+
+                if (scrollRoot.scrollTop < homeThreshold) {
+                    setActiveNav('home');
+                    window.currentPage = 'home';
+                    return;
+                }
+
+                const visible = sectionsTop
+                    .filter(item => item.top < homeThreshold)
+                    .sort((a, b) => b.top - a.top)[0];
+
+                if (visible) {
+                    setActiveNav(visible.id);
+                    window.currentPage = visible.id;
+                }
+            };
+
+            let ticking = false;
+            const onScroll = () => {
+                if (ticking) return;
+                ticking = true;
+                requestAnimationFrame(() => {
+                    updateByScroll();
+                    ticking = false;
+                });
+            };
+
+            scrollRoot.addEventListener('scroll', onScroll, { passive: true });
+            updateByScroll();
+        }
+
         // 切换左侧导航页签
         /* Switch the active sidebar item and rerender */
         function loadPage(page, element) {
             window.currentPage = page;
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            if (element) element.classList.add('active');
+            setActiveNav(page);
 
             if (page === 'home') {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (scrollRoot) {
+                    scrollRoot.scrollTo({ top: 0, behavior: 'smooth' });
+                }
                 return;
             }
 
