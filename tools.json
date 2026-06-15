@@ -7,13 +7,14 @@
   "art": [
     { "id": "a1", "title": "UI对比验收助手", "desc": "用于策划验收UI", "info": "在excel中将效果图放在左边，游戏截图放在右边，然后截图放入对话中，提示“左边是效果图，右边是游戏内截图，请帮我验收一下UI”", "tag": "ART", "image": "assets/UI.png", "link": "https://chat.q1.com/?agent_share=4m4tjVIqK5CL_xwU87Cfxw" }
   ],
-  "system": [
-    { "id": "s1", "title": "暂未想好", "desc": "欢迎提供建议，点击右上角的“添加”按钮，将好用的工具记录在其中", "info": "点击右上角的“添加”按钮，将好用的工具记录在其中，或者直接进入https://docs.qq.com/sheet/DV2t1ZGJBZ0duSEpt?no_promotion=1&is_blank_or_template=blank&tab=BB08J2填写", "tag": "SYS", "image": "assets/s1.png", "link": "https://chat.q1.com" }
-  ],
+
   "web": [
     { "id": "w1", "title": "GAMEUI", "desc": "游戏参考图", "info": "几乎绝大部分游戏截图这里都能看到", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.gameui.net/games?t=1" },
      { "id": "w2", "title": "花瓣网", "desc": "素材搜索", "info": "找游戏素材", "tag": "WEB", "image": "assets/s1.png", "link": "https://huaban.com/discovery" }
+  ],
 
+    "system": [
+    { "id": "s1", "title": "暂未想好", "desc": "欢迎提供建议，点击右上角的“添加”按钮，将好用的工具记录在其中", "info": "点击右上角的“添加”按钮，将好用的工具记录在其中，或者直接进入https://docs.qq.com/sheet/DV2t1ZGJBZ0duSEpt?no_promotion=1&is_blank_or_template=blank&tab=BB08J2填写", "tag": "SYS", "image": "assets/s1.png", "link": "https://chat.q1.com" }
   ]
 }
 
