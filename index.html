@@ -170,6 +170,21 @@
         /* Card grid layout */
         .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; margin-bottom: 40px; }
 
+        .tool-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            width: 100%;
+        }
+
+        .tool-section {
+            scroll-margin-top: 28px;
+        }
+
+        .tool-section .section-title {
+            margin-top: 0;
+        }
+
         /* Primary action button aligned with the search bar */
         .add-float-btn {
             display: inline-flex;
@@ -455,7 +470,7 @@
         <!-- 主列表区：显示当前页面对应的工具卡片 -->
         <!-- Main list: cards for the current page -->
         <div class="section-title"><i data-lucide="grid" size="16"></i> All Tools</div>
-        <div id="regularArea" class="grid"></div>
+        <div id="regularArea" class="tool-sections"></div>
 
         <footer class="footer">© Designed by Zhang Junhui</footer>
     </main>
@@ -507,6 +522,14 @@
             });
         }
 
+        /* Order and labels for the category sections shown on the page */
+        const categoryOrder = [
+            { key: 'doc', title: '文档助手', icon: 'file-text' },
+            { key: 'art', title: '参考图助手', icon: 'palette' },
+            { key: 'web', title: '相关网站', icon: 'globe' },
+            { key: 'system', title: '其他', icon: 'settings' }
+        ];
+
         // 页面初始化：加载数据、创建背景、默认进入总览
         /* Initial page bootstrap */
         async function init() {
@@ -515,6 +538,7 @@
                 contentData = await res.json();
                 createBackgroundParticles();
                 bindBackgroundMotion();
+                renderPageContent('home');
                 loadPage('home', document.querySelector('.nav-item'));
             } catch (e) {
                 console.error("Failed to load JSON");
@@ -561,6 +585,18 @@
             };
 
             return palette[key] || '96, 165, 250';
+        }
+
+        function renderCategorySection(category) {
+            const items = (contentData[category.key] || []).filter(i => !favorites.includes(i.id));
+            return `
+                <section class="tool-section" id="section-${category.key}">
+                    <div class="section-title"><i data-lucide="${category.icon}" size="16"></i> ${category.title}</div>
+                    <div class="grid">
+                        ${items.map(i => createCard(i)).join('')}
+                    </div>
+                </section>
+            `;
         }
 
         // 按分类返回卡片右下角的识别图标
@@ -622,23 +658,38 @@
         function renderPageContent(page = window.currentPage || 'home') {
             const all = [...(contentData.doc || []), ...(contentData.art || []), ...(contentData.system || []), ...(contentData.web || [])];
             const pinnedList = all.filter(i => favorites.includes(i.id));
-            const regularList = (page === 'home') ? all.filter(i => !favorites.includes(i.id)) : (contentData[page] || []).filter(i => !favorites.includes(i.id));
 
             /* Show the pinned area only when there are favorites */
             document.getElementById('pinnedSection').style.display = pinnedList.length > 0 ? 'block' : 'none';
             document.getElementById('pinnedArea').innerHTML = pinnedList.map(i => createCard(i)).join('');
-            document.getElementById('regularArea').innerHTML = regularList.map(i => createCard(i)).join('');
+            document.getElementById('regularArea').innerHTML = categoryOrder.map(renderCategorySection).join('');
             /* Rebuild Lucide icons after injecting new HTML */
             lucide.createIcons();
+
+            if (page && page !== 'home') {
+                requestAnimationFrame(() => {
+                    const target = document.getElementById(`section-${page}`);
+                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            }
         }
 
         // 切换左侧导航页签
         /* Switch the active sidebar item and rerender */
         function loadPage(page, element) {
             window.currentPage = page;
-            renderPageContent(page);
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             if (element) element.classList.add('active');
+
+            if (page === 'home') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+
+            const target = document.getElementById(`section-${page}`);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
         // 根据搜索框内容过滤当前页面里的卡片
