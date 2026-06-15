@@ -193,11 +193,21 @@
         }
 
         .tool-section {
+            position: relative;
             scroll-margin-top: 28px;
         }
 
         .tool-section .section-title {
             margin-top: 0;
+        }
+
+        .section-anchor {
+            position: absolute;
+            top: -24px;
+            left: 0;
+            width: 1px;
+            height: 1px;
+            pointer-events: none;
         }
 
         /* Primary action button aligned with the search bar */
@@ -456,11 +466,10 @@
     <!-- Left navigation: switch categories -->
     <nav class="sidebar">
         <h2 style="color: #64748b; font-size: 0.7rem; margin-bottom: 30px;">Navigation</h2>
-        <div class="nav-item active" onclick="loadPage('home', this)"><i data-lucide="layout-grid" size="18"></i>总览</div>
-        <div class="nav-item" onclick="loadPage('doc', this)"><i data-lucide="file-text" size="18"></i> 文档助手</div>
-        <div class="nav-item" onclick="loadPage('art', this)"><i data-lucide="palette" size="18"></i> 参考图助手</div>
-        <div class="nav-item" onclick="loadPage('web', this)"><i data-lucide="globe" size="18"></i> 相关网站</div>
-        <div class="nav-item" onclick="loadPage('system', this)"><i data-lucide="settings" size="18"></i> 其他</div>
+        <div class="nav-item active" data-section="doc" onclick="loadPage('doc', this)"><i data-lucide="file-text" size="18"></i> 文档助手</div>
+        <div class="nav-item" data-section="art" onclick="loadPage('art', this)"><i data-lucide="palette" size="18"></i> 参考图助手</div>
+        <div class="nav-item" data-section="web" onclick="loadPage('web', this)"><i data-lucide="globe" size="18"></i> 相关网站</div>
+        <div class="nav-item" data-section="system" onclick="loadPage('system', this)"><i data-lucide="settings" size="18"></i> 其他</div>
     
     </nav>
 
@@ -547,8 +556,9 @@
 
         let scrollObserver = null;
         let scrollRoot = null;
+        let scrollTicking = false;
 
-        // 页面初始化：加载数据、创建背景、默认进入总览
+        // 页面初始化：加载数据、创建背景、默认定位到文档助手
         /* Initial page bootstrap */
         async function init() {
             try {
@@ -556,9 +566,9 @@
                 contentData = await res.json();
                 createBackgroundParticles();
                 bindBackgroundMotion();
-                renderPageContent('home');
-                loadPage('home', document.querySelector('.nav-item'));
+                renderPageContent();
                 bindScrollSpy();
+                setActiveNav('doc');
             } catch (e) {
                 console.error("Failed to load JSON");
             }
@@ -610,6 +620,7 @@
             const items = (contentData[category.key] || []).filter(i => !favorites.includes(i.id));
             return `
                 <section class="tool-section" id="section-${category.key}">
+                    <span class="section-anchor" data-section="${category.key}" aria-hidden="true"></span>
                     <div class="section-title"><i data-lucide="${category.icon}" size="16"></i> ${category.title}</div>
                     <div class="grid">
                         ${items.map(i => createCard(i)).join('')}
@@ -640,7 +651,7 @@
             if (favorites.includes(id)) favorites = favorites.filter(f => f !== id);
             else favorites.push(id);
             localStorage.setItem('favs', JSON.stringify(favorites));
-            renderPageContent(window.currentPage || 'home');
+            renderPageContent(window.currentPage || 'doc');
         }
 
         // 把单个工具对象渲染成一张卡片
@@ -672,9 +683,9 @@
         }
 
         // 根据当前页面渲染内容：
-        // home = 总览；其他页 = 对应分类
+        // 默认渲染所有分类；page 只用于导航定位
         /* Render the current page */
-        function renderPageContent(page = window.currentPage || 'home') {
+        function renderPageContent(page = window.currentPage || 'doc') {
             const all = [...(contentData.doc || []), ...(contentData.art || []), ...(contentData.system || []), ...(contentData.web || [])];
             const pinnedList = all.filter(i => favorites.includes(i.id));
 
@@ -684,18 +695,11 @@
             document.getElementById('regularArea').innerHTML = categoryOrder.map(renderCategorySection).join('');
             /* Rebuild Lucide icons after injecting new HTML */
             lucide.createIcons();
-
-            if (page && page !== 'home') {
-                requestAnimationFrame(() => {
-                    const target = document.getElementById(`section-${page}`);
-                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                });
-            }
         }
 
         function setActiveNav(page) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            const target = document.querySelector(`.nav-item[onclick*="loadPage('${page}'"]`);
+            const target = document.querySelector(`.nav-item[data-section="${page}"]`);
             if (target) target.classList.add('active');
         }
 
@@ -703,56 +707,72 @@
             if (scrollObserver) scrollObserver.disconnect();
 
             scrollRoot = document.querySelector('.main-content');
-            const sectionIds = ['doc', 'art', 'web', 'system'];
-            const sections = sectionIds
-                .map(id => document.getElementById(`section-${id}`))
-                .filter(Boolean);
+            const anchors = Array.from(document.querySelectorAll('.section-anchor'));
 
-            if (!sections.length) return;
+            if (!anchors.length) return;
             if (!scrollRoot) return;
 
-            const homeThreshold = 220;
+            scrollObserver = new IntersectionObserver((entries) => {
+                const visible = entries
+                    .filter(entry => entry.isIntersecting)
+                    .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+                if (!visible.length) return;
+
+                const section = visible[0].target.dataset.section;
+                if (section) {
+                    setActiveNav(section);
+                    window.currentPage = section;
+                }
+            }, {
+                root: scrollRoot,
+                threshold: 0,
+                rootMargin: '-18% 0px -72% 0px'
+            });
+
+            anchors.forEach(anchor => scrollObserver.observe(anchor));
 
             const updateByScroll = () => {
-                const sectionsTop = sections.map(section => ({
-                    id: section.id.replace('section-', ''),
-                    top: section.getBoundingClientRect().top
-                }));
+                if (scrollTicking) return;
+                scrollTicking = true;
 
-                const current = sectionsTop.find(item => item.top >= -homeThreshold && item.top <= homeThreshold);
-                if (current) {
-                    setActiveNav(current.id);
-                    window.currentPage = current.id;
-                    return;
-                }
-
-                if (scrollRoot.scrollTop < homeThreshold) {
-                    setActiveNav('home');
-                    window.currentPage = 'home';
-                    return;
-                }
-
-                const visible = sectionsTop
-                    .filter(item => item.top < homeThreshold)
-                    .sort((a, b) => b.top - a.top)[0];
-
-                if (visible) {
-                    setActiveNav(visible.id);
-                    window.currentPage = visible.id;
-                }
-            };
-
-            let ticking = false;
-            const onScroll = () => {
-                if (ticking) return;
-                ticking = true;
                 requestAnimationFrame(() => {
-                    updateByScroll();
-                    ticking = false;
+                    const maxScrollTop = scrollRoot.scrollHeight - scrollRoot.clientHeight;
+                    const currentScrollTop = scrollRoot.scrollTop;
+
+                    if (currentScrollTop <= 120) {
+                        setActiveNav('doc');
+                        window.currentPage = 'doc';
+                        scrollTicking = false;
+                        return;
+                    }
+
+                    if (currentScrollTop >= maxScrollTop - 120) {
+                        setActiveNav('system');
+                        window.currentPage = 'system';
+                        scrollTicking = false;
+                        return;
+                    }
+
+                    const anchorsTop = anchors.map(anchor => ({
+                        section: anchor.dataset.section,
+                        top: anchor.getBoundingClientRect().top
+                    }));
+
+                    const visible = anchorsTop
+                        .filter(item => item.top <= 140)
+                        .sort((a, b) => b.top - a.top)[0] || anchorsTop[0];
+
+                    if (visible?.section) {
+                        setActiveNav(visible.section);
+                        window.currentPage = visible.section;
+                    }
+
+                    scrollTicking = false;
                 });
             };
 
-            scrollRoot.addEventListener('scroll', onScroll, { passive: true });
+            scrollRoot.addEventListener('scroll', updateByScroll, { passive: true });
             updateByScroll();
         }
 
@@ -761,14 +781,6 @@
         function loadPage(page, element) {
             window.currentPage = page;
             setActiveNav(page);
-
-            if (page === 'home') {
-                if (scrollRoot) {
-                    scrollRoot.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-                return;
-            }
-
             const target = document.getElementById(`section-${page}`);
             if (target) {
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
