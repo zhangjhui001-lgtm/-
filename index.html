@@ -168,6 +168,13 @@
             width: 100%;
             margin-bottom: 30px;
             flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 3;
+            padding-top: 6px;
+            padding-bottom: 10px;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.78) 72%, rgba(15, 23, 42, 0));
+            backdrop-filter: blur(10px);
         }
         /* Search field that filters the visible cards */
         .search-input {
@@ -776,6 +783,22 @@
             updateByScroll();
         }
 
+        function scrollMainToTop(behavior = 'smooth') {
+            const targets = [scrollRoot, document.scrollingElement, document.documentElement, document.body].filter(Boolean);
+            for (const target of targets) {
+                try {
+                    if (typeof target.scrollTo === 'function') {
+                        target.scrollTo({ top: 0, behavior });
+                    } else {
+                        target.scrollTop = 0;
+                    }
+                } catch (e) {
+                    target.scrollTop = 0;
+                }
+            }
+            window.scrollTo({ top: 0, behavior });
+        }
+
         // 切换左侧导航页签
         /* Switch the active sidebar item and rerender */
         function loadPage(page, element) {
@@ -784,7 +807,7 @@
             if (!scrollRoot) return;
 
             if (page === 'doc') {
-                scrollRoot.scrollTo({ top: 0, behavior: 'smooth' });
+                scrollMainToTop('smooth');
                 return;
             }
 
