@@ -781,6 +781,13 @@
         function loadPage(page, element) {
             window.currentPage = page;
             setActiveNav(page);
+            if (!scrollRoot) return;
+
+            if (page === 'doc') {
+                scrollRoot.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+
             const target = document.getElementById(`section-${page}`);
             if (target) {
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
