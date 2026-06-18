@@ -6,13 +6,16 @@
     { "id": "d4", "title": "竞品拆解专家", "desc": "按照指定方向/格式输出竞品系统拆解报告", "info": "该111", "tag": "DOC", "image": "assets/fanyi.png", "link": "https://chat.q1.com/?agent_share=r2my312AS8ff4nU9IjaDmg" }
   ],
   "art": [
-    { "id": "a1", "title": "UI对比验收助手", "desc": "用于策划验收UI", "info": "在excel中将效果图放在左边，游戏截图放在右边，然后截图放入对话中，提示“左边是效果图，右边是游戏内截图，请帮我验收一下UI”", "tag": "ART", "image": "assets/UI.png", "link": "https://chat.q1.com/?agent_share=4m4tjVIqK5CL_xwU87Cfxw" }
+    { "id": "a1", "title": "UI对比验收助手", "desc": "用于策划验收UI", "info": "在excel中将效果图放在左边，游戏截图放在右边，然后截图放入对话中，提示“左边是效果图，右边是游戏内截图，请帮我验收一下UI”", "tag": "ART", "image": "assets/UI.png", "link": "https://chat.q1.com/?agent_share=4m4tjVIqK5CL_xwU87Cfxw" },
+    { "id": "a2", "title": "图标生成助手", "desc": "【灯塔】用于生成灯塔风格的图标", "info": "在excel中将效果图放在左边，游戏截图放在右边，然后截图放入对话中，提示“左边是效果图，右边是游戏内截图，请帮我验收一下UI”", "tag": "ART", "image": "assets/UI.png", "link": "https://chat.q1.com/?agent_share=0cnfZZKAgeBuHtIexZW0LQ" },
+    { "id": "a3", "title": "魔触AI", "desc": "能够选择对应的风格进行生成，风格定向较稳定，还可以自己训练风格", "info": "在excel中将效果图放在左边，游戏截图放在右边，然后截图放入对话中，提示“左边是效果图，右边是游戏内截图，请帮我验收一下UI”", "tag": "ART", "image": "assets/UI.png", "link": "https://www.mochu.art/#/tool/aiCreate/index" }
   ],
 
   "web": [
     { "id": "w1", "title": "GAMEUI", "desc": "几乎绝大部分游戏截图这里都能看到", "info": "几乎绝大部分游戏截图这里都能看到", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.gameui.net/games?t=1" },
      { "id": "w2", "title": "花瓣网", "desc": "有较多的游戏截图和游戏资源素材，需要记得分类选择游戏", "info": "有较多的游戏截图和游戏资源素材，需要记得分类选择游戏", "tag": "WEB", "image": "assets/s1.png", "link": "https://huaban.com/discovery" },
-     { "id": "w3", "title": "pinterest", "desc": "能够有较多的欧美风格游戏素材", "info": "能够有较多的欧美风格游戏素材", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.pinterest.com/" }
+     { "id": "w3", "title": "pinterest", "desc": "能够有较多的欧美风格游戏素材", "info": "能够有较多的欧美风格游戏素材", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.pinterest.com/" },
+     { "id": "w4", "title": "ArtStation", "desc": "主要有较多的3D场景、欧美风格的角色立绘模型等等", "info": "能够有较多的欧美风格游戏素材", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.artstation.com/" }
   ],
 
     "system": [
