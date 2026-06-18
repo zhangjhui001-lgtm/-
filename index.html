@@ -135,18 +135,38 @@
             width: 220px;
             background: rgba(0, 0, 0, 0.2);
             padding: 24px;
+            box-sizing: border-box;
             border-right: 1px solid rgba(255, 255, 255, 0.05);
             flex-shrink: 0;
             position: sticky;
             top: 0;
             height: 100vh;
-            overflow-y: auto;
+            overflow: hidden;
             z-index: 1;
             backdrop-filter: blur(14px);
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-nav {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            padding-right: 4px;
         }
         .nav-item { padding: 12px; color: var(--text-dim); cursor: pointer; border-radius: 8px; transition: 0.3s; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
         .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
         .nav-item.active { background: var(--accent-blue); color: #000; font-weight: bold; }
+        .sidebar-footer {
+            flex-shrink: 0;
+            margin-top: 14px;
+            padding-top: 12px;
+            color: #758093;
+            font-size: 0.68rem;
+            line-height: 1.2;
+            text-align: left;
+            letter-spacing: 0.02em;
+            border-top: 1px solid rgba(148, 163, 184, 0.12);
+        }
         /* Main content column */
         .main-content {
             flex: 1;
@@ -384,9 +404,6 @@
 
         /* Section heading shared by pinned tools and all tools */
         .section-title { font-size: 0.85rem; color: #94a3b8; margin: 20px 0; display: flex; align-items: center; gap: 8px; }
-        /* Footer note at the bottom of the page */
-        .footer { margin-top: auto; padding-top: 40px; color: #475569; font-size: 0.75rem; text-align: center; }
-
         /* Dimmed backdrop used by the detail modal */
         .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 1000; }
         /* Modal card that shows tool details */
@@ -465,12 +482,14 @@
     <!-- 左侧导航：点击切换不同分类 -->
     <!-- Left navigation: switch categories -->
     <nav class="sidebar">
+        <div class="sidebar-nav">
         <h2 style="color: #64748b; font-size: 0.7rem; margin-bottom: 30px;">Navigation</h2>
         <div class="nav-item active" data-section="doc" onclick="loadPage('doc', this)"><i data-lucide="file-text" size="18"></i> 文档助手</div>
         <div class="nav-item" data-section="art" onclick="loadPage('art', this)"><i data-lucide="palette" size="18"></i> 参考图助手</div>
         <div class="nav-item" data-section="web" onclick="loadPage('web', this)"><i data-lucide="globe" size="18"></i> 相关网站</div>
-        <div class="nav-item" data-section="system" onclick="loadPage('system', this)"><i data-lucide="settings" size="18"></i> 其他</div>
-    
+        <div class="nav-item" data-section="system" onclick="loadPage('system', this)"><i data-lucide="settings" size="18"></i> Cod</div>
+        </div>
+        <div class="sidebar-footer">By : 张俊辉</div>
     </nav>
 
     <main class="main-content">
@@ -480,7 +499,7 @@
             <input type="text" id="searchInput" class="search-input" placeholder="Search tools..." oninput="filterCards()">
             <a class="add-float-btn" href="https://docs.qq.com/sheet/DV2t1ZGJBZ0duSEpt?no_promotion=1&is_blank_or_template=blank&tab=BB08J2" target="_blank" rel="noopener noreferrer">
                 <i data-lucide="plus" size="16"></i>
-                添加
+                有好用的工具可添加进来
             </a>
         </div>
 
@@ -494,8 +513,6 @@
         <!-- 主列表区：显示当前页面对应的工具卡片 -->
         <!-- Main list: cards for the current page -->
         <div id="regularArea" class="tool-sections"></div>
-
-        <footer class="footer">© Designed by Zhang Junhui</footer>
     </main>
 
     <script>
@@ -556,6 +573,8 @@
         let scrollObserver = null;
         let scrollRoot = null;
         let scrollTicking = false;
+        let scrollSpyHandler = null;
+        let currentSearchQuery = '';
 
         // 页面初始化：加载数据、创建背景、默认定位到文档助手
         /* Initial page bootstrap */
@@ -615,8 +634,23 @@
             return palette[key] || '96, 165, 250';
         }
 
-        function renderCategorySection(category) {
-            const items = (contentData[category.key] || []).filter(i => !favorites.includes(i.id));
+        function renderCategorySection(category, searchQuery = currentSearchQuery) {
+            const query = String(searchQuery || '').trim().toLowerCase();
+            const items = (contentData[category.key] || []).filter(i => {
+                if (favorites.includes(i.id)) return false;
+                if (!query) return true;
+                const haystack = [
+                    i.title,
+                    i.desc,
+                    i.info,
+                    i.tag,
+                    i.id
+                ].filter(Boolean).join(' ').toLowerCase();
+                return haystack.includes(query);
+            });
+
+            if (!items.length) return '';
+
             return `
                 <section class="tool-section" id="section-${category.key}">
                     <span class="section-anchor" data-section="${category.key}" aria-hidden="true"></span>
@@ -684,16 +718,30 @@
         // 根据当前页面渲染内容：
         // 默认渲染所有分类；page 只用于导航定位
         /* Render the current page */
-        function renderPageContent(page = window.currentPage || 'doc') {
+        function renderPageContent(page = window.currentPage || 'doc', searchQuery = currentSearchQuery) {
+            currentSearchQuery = searchQuery;
+            const query = String(searchQuery || '').trim().toLowerCase();
             const all = [...(contentData.doc || []), ...(contentData.art || []), ...(contentData.system || []), ...(contentData.web || [])];
-            const pinnedList = all.filter(i => favorites.includes(i.id));
+            const pinnedList = all.filter(i => {
+                if (!favorites.includes(i.id)) return false;
+                if (!query) return true;
+                const haystack = [
+                    i.title,
+                    i.desc,
+                    i.info,
+                    i.tag,
+                    i.id
+                ].filter(Boolean).join(' ').toLowerCase();
+                return haystack.includes(query);
+            });
 
             /* Show the pinned area only when there are favorites */
             document.getElementById('pinnedSection').style.display = pinnedList.length > 0 ? 'block' : 'none';
             document.getElementById('pinnedArea').innerHTML = pinnedList.map(i => createCard(i)).join('');
-            document.getElementById('regularArea').innerHTML = categoryOrder.map(renderCategorySection).join('');
+            document.getElementById('regularArea').innerHTML = categoryOrder.map(category => renderCategorySection(category, query)).join('');
             /* Rebuild Lucide icons after injecting new HTML */
             lucide.createIcons();
+            bindScrollSpy();
         }
 
         function setActiveNav(page) {
@@ -703,6 +751,9 @@
         }
 
         function bindScrollSpy() {
+            if (scrollRoot && scrollSpyHandler) {
+                scrollRoot.removeEventListener('scroll', scrollSpyHandler);
+            }
             if (scrollObserver) scrollObserver.disconnect();
 
             scrollRoot = document.querySelector('.main-content');
@@ -731,7 +782,7 @@
 
             anchors.forEach(anchor => scrollObserver.observe(anchor));
 
-            const updateByScroll = () => {
+            scrollSpyHandler = () => {
                 if (scrollTicking) return;
                 scrollTicking = true;
 
@@ -771,8 +822,8 @@
                 });
             };
 
-            scrollRoot.addEventListener('scroll', updateByScroll, { passive: true });
-            updateByScroll();
+            scrollRoot.addEventListener('scroll', scrollSpyHandler, { passive: true });
+            scrollSpyHandler();
         }
 
         function scrollMainToTop(behavior = 'smooth') {
@@ -815,10 +866,8 @@
         // 根据搜索框内容过滤当前页面里的卡片
         /* Filter visible cards using the search box text */
         function filterCards() {
-            const input = document.getElementById('searchInput').value.toLowerCase();
-            document.querySelectorAll('.card').forEach(card => {
-                card.style.display = card.innerText.toLowerCase().includes(input) ? 'flex' : 'none';
-            });
+            const input = document.getElementById('searchInput').value;
+            renderPageContent(window.currentPage || 'doc', input);
         }
 
         // 启动页面
