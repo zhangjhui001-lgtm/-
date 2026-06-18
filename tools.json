@@ -1,26 +1,27 @@
 {
   "doc": [
-    { "id": "d1", "title": "需求文档审查助手", "desc": "检查文档逻辑漏洞", "info": "将需求文档拖入对话中，并发送“请你根据文档中写的需求进行审查”", "tag": "DOC", "image": "assets/shencha.png", "link": "https://chat.q1.com/?agent_share=pblnHahyF5I0kyaJ-vxwvA" },
+     { "id": "d1", "title": "策划多语言翻译工具（研发：滋阳）", "desc": "Lang表翻译提需流程", "info": "该工具用于处理多语言翻译需求", "tag": "DOC", "highlight": false, "image": "assets/fanyi.png", "link": "https://bonny0506.netlify.app/" },
+    { "id": "d3", "title": "需求文档审查助手", "desc": "检查文档逻辑漏洞", "info": "将需求文档拖入对话中，并发送“请你根据文档中写的需求进行审查”", "tag": "DOC", "image": "assets/shencha.png", "link": "https://chat.q1.com/?agent_share=pblnHahyF5I0kyaJ-vxwvA" },
     { "id": "d2", "title": "需求文档测试用例", "desc": "根据需求内容生成策划自测用例", "info": "将需求文档拖入对话中，并发送“请你根据文档系统需求，生成策划自测用例”，会生成测试用例表。该工具是用来策划验收需求时的初步自测", "tag": "DOC", "image": "assets/ceshiyongli.png", "link": "https://chat.q1.com/?agent_share=P_8le3YbV8Xct2rEOqbdiw" },
-    { "id": "d3", "title": "策划多语言翻译工具（研发：滋阳）", "desc": "Lang表翻译提需流程", "info": "该工具用于处理多语言翻译需求", "tag": "DOC", "image": "assets/fanyi.png", "link": "https://bonny0506.netlify.app/" },
-    { "id": "d4", "title": "竞品拆解专家", "desc": "按照指定方向/格式输出竞品系统拆解报告", "info": "该111", "tag": "DOC", "image": "assets/fanyi.png", "link": "https://chat.q1.com/?agent_share=r2my312AS8ff4nU9IjaDmg" }
+    { "id": "d4", "title": "竞品拆解专家", "desc": "按照指定方向/格式输出竞品系统拆解报告", "info": "按照指定方向/格式输出竞品系统拆解报告", "tag": "DOC", "image": "assets/jingpin.png", "link": "https://chat.q1.com/?agent_share=r2my312AS8ff4nU9IjaDmg" }
   ],
   "art": [
     { "id": "a1", "title": "UI对比验收助手", "desc": "用于策划验收UI", "info": "在excel中将效果图放在左边，游戏截图放在右边，然后截图放入对话中，提示“左边是效果图，右边是游戏内截图，请帮我验收一下UI”", "tag": "ART", "image": "assets/UI.png", "link": "https://chat.q1.com/?agent_share=4m4tjVIqK5CL_xwU87Cfxw" },
-    { "id": "a2", "title": "图标生成助手", "desc": "【X-Clash】用于生成灯塔风格的图标", "info": "在excel中将效果图放在左边，游戏截图放在右边，然后截图放入对话中，提示“左边是效果图，右边是游戏内截图，请帮我验收一下UI”", "tag": "ART", "image": "assets/UI.png", "link": "https://chat.q1.com/?agent_share=0cnfZZKAgeBuHtIexZW0LQ" },
-    { "id": "a3", "title": "魔触AI", "desc": "能够选择对应的风格进行生成，风格定向较稳定，还可以自己训练风格", "info": "在excel中将效果图放在左边，游戏截图放在右边，然后截图放入对话中，提示“左边是效果图，右边是游戏内截图，请帮我验收一下UI”", "tag": "ART", "image": "assets/UI.png", "link": "https://www.mochu.art/#/tool/aiCreate/index" }
+    { "id": "a2", "title": "图标生成助手（优化中）", "desc": "【X-Clash】用于生成位面2风格的图标", "info": "丢一张参考图标，并描述一句：“按照我们风格重新生成”", "tag": "ART", "image": "", "link": "https://chat.q1.com/?agent_share=0cnfZZKAgeBuHtIexZW0LQ" },
+    { "id": "a3", "title": "魔触AI", "desc": "能够选择对应的风格进行生成，风格定向较稳定，还可以自己训练风格", "info": "直接在魔触AI中选择风格模型，然后贴一张参考图标，会自动生成提示词，直接生成即可，就会生成出对应风格的图标", "tag": "ART", "image": "assets/mochu.png", "link": "https://www.mochu.art/#/tool/aiCreate/index" }
   ],
 
   "web": [
-    { "id": "w1", "title": "GAMEUI", "desc": "几乎绝大部分游戏截图这里都能看到", "info": "几乎绝大部分游戏截图这里都能看到", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.gameui.net/games?t=1" },
-     { "id": "w2", "title": "花瓣网", "desc": "有较多的游戏截图和游戏资源素材，需要记得分类选择游戏", "info": "有较多的游戏截图和游戏资源素材，需要记得分类选择游戏", "tag": "WEB", "image": "assets/s1.png", "link": "https://huaban.com/discovery" },
-     { "id": "w3", "title": "Pinterest", "desc": "能够有较多的欧美风格游戏素材", "info": "能够有较多的欧美风格游戏素材", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.pinterest.com/" },
-     { "id": "w4", "title": "ArtStation", "desc": "主要有较多的3D场景、欧美风格的角色立绘模型等等", "info": "能够有较多的欧美风格游戏素材", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.artstation.com/" }
+    { "id": "w1", "title": "GAMEUI", "desc": "几乎绝大部分游戏截图这里都能看到", "info": "几乎绝大部分游戏截图这里都能看到", "tag": "WEB", "link": "https://www.gameui.net/games?t=1" },
+     { "id": "w2", "title": "花瓣网", "desc": "有较多的游戏截图和游戏资源素材，需要记得分类选择游戏", "info": "有较多的游戏截图和游戏资源素材，需要记得分类选择游戏", "tag": "WEB", "link": "https://huaban.com/discovery" },
+     { "id": "w3", "title": "Pinterest", "desc": "能够有较多的欧美风格游戏素材", "info": "能够有较多的欧美风格游戏素材", "tag": "WEB","link": "https://www.pinterest.com/" },
+     { "id": "w4", "title": "ArtStation", "desc": "主要有较多的3D场景、欧美风格的角色立绘模型等等", "info": "能够有较多的欧美风格游戏素材", "tag": "WEB", "link": "https://www.artstation.com/" }
   ],
 
     "Cod": [
-    { "id": "s1", "title": "Codex部署教程", "desc": "基础简易版的Codex安装部署教程", "info": "点击右上角的“添加”按钮，将好用的工具记录在其中，或者直接进入https://docs.qq.com/sheet/DV2t1ZGJBZ0duSEpt?no_promotion=1&is_blank_or_template=blank&tab=BB08J2填写", "tag": "SYS", "image": "assets/s1.png", "link": "https://chat.q1.com" },
-    { "id": "s2", "title": "Skill安装步骤", "desc": "欢迎提供建议，点击右上角的“添加”按钮，将好用的工具记录在其中", "info": "点击右上角的“添加”按钮，将好用的工具记录在其中，或者直接进入https://docs.qq.com/sheet/DV2t1ZGJBZ0duSEpt?no_promotion=1&is_blank_or_template=blank&tab=BB08J2填写", "tag": "SYS", "image": "assets/s1.png", "link": "https://chat.q1.com" }
+    { "id": "s1", "title": "Codex部署教程", "desc": "基础简易版的Codex安装部署教程", "info": "Codex是桌面AI agent，主要是能够查看并编辑本地的数据，更加智能和便捷", "tag": "SYS", "image": "assets/s1.png", "link": "https://docs.qq.com/sheet/DV2xFWW9GeGNZV1d2?aidPos=detail&no_promotion=1&is_blank_or_template=blank&tab=BB08J2" },
+    { "id": "s2", "title": "Skill安装步骤", "desc": "给Codex增加的技能，加强使用效率", "info": "给Codex增加的技能，加强使用效率", "tag": "SYS", "image": "assets/s1.png", "link": "https://docs.qq.com/sheet/DV2xFWW9GeGNZV1d2?aidPos=detail&no_promotion=1&is_blank_or_template=blank&tab=BB08J2" },
+    { "id": "s1", "title": "其他", "desc": "点击右上角的“添加”按钮，将好用的工具记录在其中", "info": "点击右上角的“添加”按钮，将好用的工具记录在其中，或者直接进入https://docs.qq.com/sheet/DV2t1ZGJBZ0duSEpt?no_promotion=1&is_blank_or_template=blank&tab=BB08J2填写", "tag": "SYS",  "link": "https://docs.qq.com/sheet/DV2t1ZGJBZ0duSEpt?no_promotion=1&is_blank_or_template=blank&tab=BB08J2" }
   ]
 }
 

@@ -286,6 +286,42 @@
             pointer-events: none;
         }
 
+        .card.is-highlight {
+            border-color: rgba(var(--card-accent-rgb), 0.72);
+            box-shadow:
+                0 0 0 1px rgba(var(--card-accent-rgb), 0.24),
+                0 0 24px rgba(var(--card-accent-rgb), 0.14),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 18px 42px rgba(2, 6, 23, 0.34);
+        }
+
+        .card.is-highlight::before {
+            background:
+                linear-gradient(120deg,
+                    rgba(var(--card-accent-rgb), 0.42),
+                    rgba(255, 255, 255, 0.12),
+                    rgba(var(--card-accent-rgb), 0.56),
+                    rgba(255, 255, 255, 0.08),
+                    rgba(var(--card-accent-rgb), 0.34)),
+                linear-gradient(135deg, rgba(var(--card-accent-rgb), 0.24), transparent 30%),
+                radial-gradient(circle at top right, rgba(var(--card-accent-rgb), 0.28), transparent 38%);
+            background-size: 180% 180%, auto, auto;
+            background-position: 0% 50%, 0 0, 0 0;
+            animation: highlightFlow 5s linear infinite, highlightPulse 3.2s ease-in-out infinite;
+            opacity: 1;
+            filter: saturate(1.18);
+        }
+
+        .card.is-highlight::after {
+            opacity: 0.92;
+            transform: scale(1.02);
+            background: radial-gradient(circle, rgba(var(--card-accent-rgb), 0.24), transparent 72%);
+        }
+
+        .card.is-highlight:hover::after {
+            opacity: 1;
+        }
+
         .card::after {
             content: "";
             position: absolute;
@@ -430,6 +466,18 @@
             50% { transform: translate3d(0, -22px, 0) scale(1.06); }
         }
 
+        /* Highlight animation: flowing accent wash */
+        @keyframes highlightFlow {
+            0% { background-position: 0% 50%, 0 0, 0 0; }
+            100% { background-position: 200% 50%, 0 0, 0 0; }
+        }
+
+        /* Highlight animation: breathing glow */
+        @keyframes highlightPulse {
+            0%, 100% { filter: saturate(1.12) brightness(1); }
+            50% { filter: saturate(1.24) brightness(1.06); }
+        }
+
         /* Particle animation: drift out and fade away */
         @keyframes particleDrift {
             0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0; }
@@ -444,6 +492,7 @@
             .bg-orb,
             .particle,
             .card,
+            .card.is-highlight::before,
             .card::after,
             .add-float-btn {
                 animation: none !important;
@@ -691,8 +740,9 @@
         /* Render one tool as a clickable card */
         function createCard(item) {
             const isFav = favorites.includes(item.id);
+            const isHighlighted = item.highlight === true;
             return `
-                <div class="card" style="--card-accent-rgb: ${getCardAccent(item.tag)};" onclick='window.open(${JSON.stringify(item.link)})'>
+                <div class="card ${isHighlighted ? 'is-highlight' : ''}" style="--card-accent-rgb: ${getCardAccent(item.tag)};" onclick='window.open(${JSON.stringify(item.link)})'>
                     <div class="card-content">
                         <h3>
                             <span class="card-title">${item.title}</span>
