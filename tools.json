@@ -14,12 +14,12 @@
   "web": [
     { "id": "w1", "title": "GAMEUI", "desc": "几乎绝大部分游戏截图这里都能看到", "info": "几乎绝大部分游戏截图这里都能看到", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.gameui.net/games?t=1" },
      { "id": "w2", "title": "花瓣网", "desc": "有较多的游戏截图和游戏资源素材，需要记得分类选择游戏", "info": "有较多的游戏截图和游戏资源素材，需要记得分类选择游戏", "tag": "WEB", "image": "assets/s1.png", "link": "https://huaban.com/discovery" },
-     { "id": "w3", "title": "pinterest", "desc": "能够有较多的欧美风格游戏素材", "info": "能够有较多的欧美风格游戏素材", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.pinterest.com/" },
+     { "id": "w3", "title": "Pinterest", "desc": "能够有较多的欧美风格游戏素材", "info": "能够有较多的欧美风格游戏素材", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.pinterest.com/" },
      { "id": "w4", "title": "ArtStation", "desc": "主要有较多的3D场景、欧美风格的角色立绘模型等等", "info": "能够有较多的欧美风格游戏素材", "tag": "WEB", "image": "assets/s1.png", "link": "https://www.artstation.com/" }
   ],
 
-    "system": [
-    { "id": "s1", "title": "暂未想好", "desc": "欢迎提供建议，点击右上角的“添加”按钮，将好用的工具记录在其中", "info": "点击右上角的“添加”按钮，将好用的工具记录在其中，或者直接进入https://docs.qq.com/sheet/DV2t1ZGJBZ0duSEpt?no_promotion=1&is_blank_or_template=blank&tab=BB08J2填写", "tag": "SYS", "image": "assets/s1.png", "link": "https://chat.q1.com" }
+    "Codex": [
+    { "id": "s1", "title": "安装步骤", "desc": "欢迎提供建议，点击右上角的“添加”按钮，将好用的工具记录在其中", "info": "点击右上角的“添加”按钮，将好用的工具记录在其中，或者直接进入https://docs.qq.com/sheet/DV2t1ZGJBZ0duSEpt?no_promotion=1&is_blank_or_template=blank&tab=BB08J2填写", "tag": "SYS", "image": "assets/s1.png", "link": "https://chat.q1.com" }
   ]
 }
 
